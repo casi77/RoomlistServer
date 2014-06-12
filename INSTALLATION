@@ -1,0 +1,9 @@
+1. install node.js (http://nodejs.org/)
+
+2. run "npm install" in project folder
+
+3. run "node app.js"
+
+Server starts on localhost:3000
+
+get Schedule: http://localhost:3000/:beaconID/schedule

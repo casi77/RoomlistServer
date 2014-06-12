@@ -1,0 +1,4 @@
+{
+    "database": "postgresql://roomserver:room@localhost/roomserver"
+
+}
