@@ -2,9 +2,10 @@
  * @fileOverview Controller for the Projects Model 
  */
 var Schedule = require('../models/schedule.js').Schedule;
+var moment = require('moment');
 
 /**
- * GET list Schedule from Database
+ * GET list Schedule for a beacon_id from Database
  * @param {Object} req Request-Data
  * @param {Object} res Response-Data
  * @return {function} res.send Send Response
@@ -12,7 +13,8 @@ var Schedule = require('../models/schedule.js').Schedule;
 exports.getRoomSchedule = function(req, res){
     console.log(req.params.id);
 
-    var filter = {beacon_id: req.params.id};
+
+   var filter = {beacon_id: req.params.id};
 
    Schedule.findByRoom(filter, function(err, schedules){
 
@@ -72,18 +74,23 @@ exports.getRoomSchedule = function(req, res){
        }
 
        if (schedules != undefined){
-           viewModel.room = schedules[0].room_id;
+           viewModel.room_id = schedules[0].room_id;
        }
 
+       viewModel.beacon_id = req.params.id;
        viewModel.schedules = [];
 
        for(i = 0; i < schedules.length; i++) {
 
 
            var schedule = {};
-           schedule.date = schedules[i].date;
-           schedule.day = schedules[i].day;
+           if(schedules[i].date != null) {
+               schedule.date = moment(schedules[i].date).format('YYYY-MM-DD');
+           }
 
+           if(schedules[i].day != null) {
+               schedule.day = schedules[i].day;
+           }
            viewModel.schedules.push(schedule);
 
            getUser(schedules[i], i);

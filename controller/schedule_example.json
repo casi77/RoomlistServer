@@ -1,0 +1,52 @@
+//Response for GET host/ble122/schedule
+
+{
+    "room_id": 1201, //Room ID
+    "beacon_id": "ble122",
+    "schedules": [ //Schedule with entries for the requested room
+        {
+            "day": 2, //Reserved Weekday (0 = Sunday; only provided for repeating reservations with no specific date)
+            "user": {
+                "id": 3,
+                "firstname": "Lukas",
+                "lastname": "Karabin",
+                "email": null
+            },
+            "start": "12:30:00",    //Start Time of reservation
+            "end": "14:00:00"       //End Time of reservation
+        },
+        {
+            "date": "2014-06-18",   //Reserved Date (only provided for reservation with unique date)
+            "user": {
+                "id": 3,
+                "firstname": "Lukas",
+                "lastname": "Karabin",
+                "email": null
+            },
+            "start": "09:45:00",
+            "end": "11:15:00"
+        },
+        {
+            "date": "2014-06-20",
+            "user": {
+                "id": 2,
+                "firstname": "Max",
+                "lastname": "Muster",
+                "email": null
+            },
+            "start": "12:30:00",
+            "end": "14:00:00"
+        },
+        {
+            "date": "2014-06-20",
+            "user": {
+                "id": 1,
+                "firstname": "Carsten",
+                "lastname": "Langmaack",
+                "email": "carsten.langmaack@student.fh-kiel.de"
+            },
+            "start": "08:00:00",
+            "end": "09:30:00"
+        }
+    ]
+}
