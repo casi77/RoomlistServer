@@ -1,7 +1,7 @@
 /**
  * @fileOverview Controller for the Projects Model 
  */
-var Schedule = require('../models/schedule.js').Schedule;
+var Schedule = require('../models/models.js').Schedule;
 var moment = require('moment');
 
 /**
@@ -10,6 +10,7 @@ var moment = require('moment');
  * @param {Object} res Response-Data
  * @return {function} res.send Send Response
  */
+
 exports.getRoomSchedule = function(req, res){
     console.log(req.params.id);
 
@@ -22,6 +23,8 @@ exports.getRoomSchedule = function(req, res){
        var i = 0;
        var k = 0;
        var j = 0;
+
+
 
        var getUser = function(schedule, n){
 
@@ -41,6 +44,7 @@ exports.getRoomSchedule = function(req, res){
                }
 
                viewModel.schedules[n].user = user;
+
 
                k++
 
@@ -74,7 +78,10 @@ exports.getRoomSchedule = function(req, res){
        }
 
        if (schedules != undefined){
-           viewModel.room_id = schedules[0].room_id;
+           console.log(schedules);
+           if(schedules[0]!=undefined) {
+               viewModel.room_id = schedules[0].room_id;
+           }
        }
 
        viewModel.beacon_id = req.params.id;
@@ -86,15 +93,36 @@ exports.getRoomSchedule = function(req, res){
            var schedule = {};
            if(schedules[i].date != null) {
                schedule.date = moment(schedules[i].date).format('YYYY-MM-DD');
+               console.log(schedule.date);
            }
+           else{
+
+               schedule.date = null;
+           }
+
 
            if(schedules[i].day != null) {
                schedule.day = schedules[i].day;
            }
+           else{
+
+               schedule.day = null;
+           }
+
+           schedule.title = schedules[i].title;
+
            viewModel.schedules.push(schedule);
 
            getUser(schedules[i], i);
            getBlock(schedules[i], i);
+
+
+       }
+
+       if (schedule === undefined){
+
+           viewModel =  {};
+           doRender();
 
        }
 

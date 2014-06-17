@@ -5,9 +5,37 @@ var config = require("../config.json");
 var orm = require("orm");
 var db = orm.connect(config.database);
 
-var Room = require("../models/room.js").Room;
-var Block = require("../models/block.js").Block;
-var User = require("../models/user.js").User;
+
+/**
+ * User Model
+ * @class User
+ */
+var User = db.define('users', {
+    id : Number,
+    firstname: String,
+    lastname: String,
+    email: String
+});
+
+
+/**
+ * Block Model
+ * @class Block
+ */
+var Block = db.define('blocks', {
+    id: Number,
+    start: String,
+    end: String
+});
+
+/**
+ * Room Model
+ * @class Project
+ */
+var Room = db.define('rooms', {
+    id : Number,
+    beacon_id: String
+});
 
 /**
  * Schedule Model
