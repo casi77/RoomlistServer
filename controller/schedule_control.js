@@ -3,6 +3,7 @@
  */
 var Schedule = require('../models/models.js').Schedule;
 var moment = require('moment');
+var _ = require('underscore');
 
 /**
  * GET list Schedule for a beacon_id from Database
@@ -12,7 +13,6 @@ var moment = require('moment');
  */
 
 exports.getRoomSchedule = function(req, res){
-    console.log(req.params.id);
 
 
    var filter = {beacon_id: req.params.id};
@@ -70,15 +70,20 @@ exports.getRoomSchedule = function(req, res){
            });
        }
 
-       var doRender = function(){
 
+       var doRender = function(){
+           //Render JSON if viewModel is complete
            if (i === schedules.length && j === schedules.length && k === schedules.length) {
+
+               //sort by start
+               viewModel.schedules = _.sortBy(viewModel.schedules, function(o) { return o.start; });
+
+               console.log(viewModel);
                return res.json(200, viewModel);
            }
        }
 
        if (schedules != undefined){
-           console.log(schedules);
            if(schedules[0]!=undefined) {
                viewModel.room_id = schedules[0].room_id;
            }
@@ -93,7 +98,7 @@ exports.getRoomSchedule = function(req, res){
            var schedule = {};
            if(schedules[i].date != null) {
                schedule.date = moment(schedules[i].date).format('YYYY-MM-DD');
-               console.log(schedule.date);
+
            }
            else{
 
