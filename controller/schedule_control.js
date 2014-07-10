@@ -6,7 +6,7 @@ var moment = require('moment');
 var _ = require('underscore');
 
 /**
- * GET list Schedule for a beacon_id from Database
+ * GET Schedule for a beacon_id from Database
  * @param {Object} req Request-Data
  * @param {Object} res Response-Data
  * @return {function} res.send Send Response
@@ -15,17 +15,35 @@ var _ = require('underscore');
 exports.getRoomSchedule = function(req, res){
 
 
+   //Filter for database search
    var filter = {beacon_id: req.params.id};
 
+
+   //Get Schedule from database
    Schedule.findByRoom(filter, function(err, schedules){
 
+       //JSON object containing room-data and the Schedule entries
        var viewModel = {};
        var i = 0;
        var k = 0;
        var j = 0;
 
 
+       //Renders JSON and send response if viewModel is complete
+       var doRender = function(){
 
+           if (i === schedules.length && j === schedules.length && k === schedules.length) {
+
+               //sort by start
+               viewModel.schedules = _.sortBy(viewModel.schedules, function(o) { return o.start; });
+
+               console.log(viewModel);
+               return res.json(200, viewModel);
+           }
+       }
+
+
+       //Map User to JSON object
        var getUser = function(schedule, n){
 
            var user ={};
@@ -53,6 +71,7 @@ exports.getRoomSchedule = function(req, res){
 
        };
 
+       //Map start and end-times to JSON object
        var getBlock = function(schedule, n){
 
            schedule.getBlock(function(err, block){
@@ -71,18 +90,6 @@ exports.getRoomSchedule = function(req, res){
        }
 
 
-       var doRender = function(){
-           //Render JSON if viewModel is complete
-           if (i === schedules.length && j === schedules.length && k === schedules.length) {
-
-               //sort by start
-               viewModel.schedules = _.sortBy(viewModel.schedules, function(o) { return o.start; });
-
-               console.log(viewModel);
-               return res.json(200, viewModel);
-           }
-       }
-
        if (schedules != undefined){
            if(schedules[0]!=undefined) {
                viewModel.room_id = schedules[0].room_id;
@@ -92,8 +99,9 @@ exports.getRoomSchedule = function(req, res){
        viewModel.beacon_id = req.params.id;
        viewModel.schedules = [];
 
-       for(i = 0; i < schedules.length; i++) {
 
+       //Map schedule entries to JSON
+       for(i = 0; i < schedules.length; i++) {
 
            var schedule = {};
            if(schedules[i].date != null) {
@@ -124,12 +132,16 @@ exports.getRoomSchedule = function(req, res){
 
        }
 
+
+       //If no entries render empty JSON
        if (schedule === undefined){
 
            viewModel =  {};
            doRender();
 
        }
+
+
 
    });
 };

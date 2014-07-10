@@ -11,14 +11,15 @@ var app = express();
 /**
  * Express Configuration
  */
-app.configure(function(req, res){	
+app.configure(function(req, res){
+    //Listen Port
 	app.set('port', process.env.PORT || 3000);
-	app.set('views', path.join(__dirname, 'views'));
-	app.use(express.favicon());
-	app.use(express.logger('dev'));
+    app.use(express.logger('dev'));
 	app.use(express.json());
 	app.use(express.urlencoded());
 	app.use(express.methodOverride());
+
+    //public path
 	app.use(express.static(path.join(__dirname, 'public')));
 });
 
@@ -27,6 +28,7 @@ app.configure(function(req, res){
  * Routes
  */
 
+//GET schedule for provided BeaconID (:id)
 app.get('/:id/schedule', schedule.getRoomSchedule);
 
 
